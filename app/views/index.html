@@ -1,0 +1,329 @@
+{% extends 'layouts/layout-transactional.html' %}
+
+{% block pageTitle %}
+  UECDI Care advice demo
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-three-quarters">
+
+    <h1 class="nhsuk-u-margin-top-4">
+      UECDI Care advice demo
+    </h1>
+
+    <div class="nhsuk-warning-callout">
+  <h3 class="nhsuk-warning-callout__label">Note</h3>
+  <p>This screen is for driving the demo only and is not intended for patient view</p>
+</div>
+
+    <h2>Scenario details</h2>
+    <p>Non clinical call handler on a call with a patient, arrived at a disposition:
+      <br>
+      <br>
+      <strong>Consultation summary:</strong>
+      <ul>
+        <li>Illness - palpatations</li>
+        <li>Warm to touch</li>
+        <li>Palpitations present at time of assessment</li>
+        <li>Final disposition: Dx02 - The individual needs to attend an emergency treatment
+        centre within 1 hour.</li>
+      </ul>
+    </p>
+
+
+
+<details class="nhsuk-details nhsuk-expander">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">
+      Example consultation report
+    </span>
+  </summary>
+  <div class="nhsuk-details__text">
+    <p>
+      <ul>
+
+        <li><a href="/files/111_male_palpitations _TEST_USER1.pdf">PDF View</a></li>
+        <li>Case ID 53b15dac-debd-43e0-9e41-03f428a1a8a7</li>
+        <li>Created on 07/09/2017 12:44:41</li>
+        <li>Pathways R14.0.0_IUC_v1</li>
+        <li>System Settings: None</li>
+      </ul>
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <th>PATIENT: </th>
+          <td>John Bloggs</td>
+        </tr>
+
+        <tr>
+          <th>TELEPHONE: </th>
+          <td>07900 000 000</td>
+        </tr>
+
+        <tr>
+          <th>AGE GROUP: </th>
+          <td>Adult</td>
+        </tr>
+
+        <tr>
+          <th>DOB or BIRTH YEAR: </th>
+          <td>07/09/1967</td>
+        </tr>
+
+        <tr>
+          <th>GENDER: </th>
+          <td>Male</td>
+        </tr>
+
+        <tr>
+          <th>PARTY: </th>
+          <td>1</td>
+        </tr>
+
+        <tr>
+          <th>POSTCODE: </th>
+          <td>DH1 2HP</td>
+        </tr>
+
+        <tr>
+          <th>NOTES:</th>
+          <td></td>
+        </tr>
+
+        <tr>
+          <th>SKILLSET:</th>
+          <td>111 Call Handler</td>
+        </tr>
+
+        <tr>
+          <th>CALL HANDLER USER ID:</th>
+          <td>TEST_USER1</td>
+        </tr>
+
+        <tr>
+          <th>PATHWAY:</th>
+          <td>PW1030 - Palpitations</td>
+        </tr>
+
+        <tr>
+          <th>SYMPTOM GROUP:</th>
+          <td>1137 - Palpitations</td>
+        </tr>
+
+        <tr>
+          <th>SYMPTOM DISCRIMINATOR:</th>
+          <td>4052 - ED full ED assessment and management capability</td>
+        </tr>
+
+        <tr>
+          <th>DISPOSITION:</th>
+          <td>Dx02 - The individual needs to attend an emergency treatment centre within 1 hour.</td>
+        </tr>
+
+        <tr>
+          <th>SELECTED SERVICE:</th>
+          <td>119857, ED: University Hospital North Durham (Durham), University Hospital of North Durham, North Road, Durham, , DH1 5TW, 0191 333 2333</td>
+        </tr>
+
+        <tr>
+          <th>DOS TRANSACTIONID: </th>
+          <td>ce332303-6fb0-524e-e0a6-302d9e12e205</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <p>
+      <strong>CONSULTATION SUMMARY:</strong>
+      <ul>
+
+        <li>Illness - palpatations</li>
+        <li>Warm to touch</li>
+        <li>Palpitations present at time of assessment</li>
+      </ul>  
+    </p>
+
+
+    <p>
+      <strong>PATHWAYS ASSESSMENT:</strong>
+      <ul>
+
+        <li>An injury or health problem was the reason for the contact.</li>
+        <li>Heavy bleeding had not occurred in the previous 30 minutes.</li>
+        <li>An illness or health problem was the main problem. - palpatations</li>
+        <li>The individual was not fighting for breath.</li>
+        <li>The main reason for the assessment was not a heart attack, chest/upper back pain, probable stroke, recent</li>
+        <li>fit/seizure or suicide attempt.</li>
+        <li>The main reason for contact was not new confusion, declared diabetic hypo/hyperglycaemia, a probable allergic</li>
+        <li>reaction or ICD shock.</li>
+        <li>The skin on the torso felt normal, warm or hot.</li>
+        <li>The individual did not have an implanted cardioverter defibrillator.</li>
+        <li>There had been no crushing chest, upper back or abdominal pain, or chest pain radiating to the arm, neck or</li>
+        <li>jaw in the previous 24 hours.</li>
+        <li>There had been no episodes of inability to raise both arms, speech difficulty or unilateral facial weakness in the</li>
+        <li>last week.</li>
+        <li>There had been no episode of unilateral leg weakness in the last week.</li>
+        <li>There had been no exposure to extremes of temperature in the previous 24 hours.</li>
+        <li>There was no new or worsening breathlessness.</li>
+        <li>Severe illness was not described.</li>
+        <li>PATIENT: John Bloggs</li>
+        <li>TELEPHONE:</li>
+        <li>AGE GROUP: Adult</li>
+        <li>DOB or BIRTH YEAR: 07/09/1967</li>
+        <li>GENDER: Male</li>
+        <li>PARTY: 1</li>
+        <li>POSTCODE: DH1 2HP</li>
+        <li>NOTES:</li>
+        <li>SKILLSET: 111 Call Handler</li>
+        <li>CALL HANDLER USER ID: TEST_USER1</li>
+        <li>PATHWAY: PW1030 - Palpitations</li>
+        <li>SYMPTOM GROUP: 1137 - Palpitations</li>
+        <li>SYMPTOM DISCRIMINATOR: 4052 - ED full ED assessment and management capability</li>
+        <li>DISPOSITION: Dx02 - The individual needs to attend an emergency treatment</li>
+        <li>centre within 1 hour.</li>
+        <li>SELECTED SERVICE: 119857, ED: University Hospital North Durham (Durham),</li>
+        <li>University Hospital of North Durham, North Road, Durham, , DH1</li>
+        <li>5TW, 0191 333 2333</li>
+        <li>DOS TRANSACTIONID: ce332303-6fb0-524e-e0a6-302d9e12e205</li>
+        <li>There were palpitations at the time of the assessment.</li>
+        <li>There was no fainting or loss of consciousness in the previous 24 hours.</li>
+        <li>There was no history of previous heart problems.</li>
+      </ul>
+    </p>
+
+    <p>
+
+      <strong>ADVICE GIVEN:</strong>
+      <ul>
+
+        <li>Someone else should drive the individual.</li>
+        <li>Take a mobile phone if possible, in case symptoms get worse and an ambulance is needed.</li>
+        <li>Before you go, I will just check whether I need to give you any further instructions or advice.</li>
+        <li>Drinking caffeine or alcohol, or smoking and taking decongestants can all make the problem worse.</li>
+        <li>Breathlessness or pain in the chest that is getting worse - CALL 999</li>
+        <li>Pain in the upper abdomen or upper back - CALL 999</li>
+        <li>Palpitations lasting more than 15 minutes - GO STRAIGHT TO THE NEAREST EMERGENCY DEPARTMENT.</li>
+        <li>If there are any new symptoms, or if the condition gets worse, changes or you have any other concerns, call us back.</li>
+      </ul>
+    </p>
+
+  </div>
+</details>
+
+ <!--      <div class="panel panel-primary">
+        <div class="panel-heading" title="Dx02">
+          Attend Emergency Treatment Centre within 1 hour
+        </div>
+        <div class="panel-body">
+
+          <div class="radio" title="Dx02">
+            <label>
+              <input checked="checked" data-transfer-code="-5" data-val="true" data-val-number="The field SelectedDispositionItem must be a number." data-val-required="The SelectedDispositionItem field is required." id="SelectedDispositionItem102261" name="SelectedDispositionItem" required="true" type="radio" value="102261" aria-required="true">
+              The individual needs to attend an emergency treatment centre within 1 hour.
+            </label>
+          </div>
+          <div>The DoS will return a list of services that are able to manage the problem.</div>
+          <hr class="thinbottomhr">
+          <input id="CareAdviceListUrl" name="CareAdviceListUrl" type="hidden" value="https://pathweb.pathwaysdos.nhs.uk/DxDispositionEP/GetCareAdviceList?caseId=c95a8944-96b9-452f-8be5-8c1f81c5d5a7">
+          <div id="careAdviceList">
+
+            <div class="checkbox">
+
+
+              <label title="Cx525">
+                <input data-val="true" data-val-required="The IsSelected field is required." id="CareAdviceItemSelections_0__IsSelected" name="CareAdviceItemSelections[0].IsSelected" type="checkbox" value="true"><input name="CareAdviceItemSelections[0].IsSelected" type="hidden" value="false">
+                Someone else should drive the individual.
+              </label>
+              <input data-val="true" data-val-number="The field ItemId must be a number." data-val-required="The ItemId field is required." id="CareAdviceItemSelections_0__ItemId" name="CareAdviceItemSelections[0].ItemId" type="hidden" value="931522">
+
+            </div>
+            <hr class="thinhr">
+            <div class="checkbox">
+
+
+              <label title="Cx525">
+                <input data-val="true" data-val-required="The IsSelected field is required." id="CareAdviceItemSelections_1__IsSelected" name="CareAdviceItemSelections[1].IsSelected" type="checkbox" value="true"><input name="CareAdviceItemSelections[1].IsSelected" type="hidden" value="false">
+                Take any medicines and medical records to the hospital.
+              </label>
+              <input data-val="true" data-val-number="The field ItemId must be a number." data-val-required="The ItemId field is required." id="CareAdviceItemSelections_1__ItemId" name="CareAdviceItemSelections[1].ItemId" type="hidden" value="931523">
+
+            </div>
+            <hr class="thinhr">
+            <div class="checkbox">
+
+
+              <label title="Cx525">
+                <input data-val="true" data-val-required="The IsSelected field is required." id="CareAdviceItemSelections_2__IsSelected" name="CareAdviceItemSelections[2].IsSelected" type="checkbox" value="true"><input name="CareAdviceItemSelections[2].IsSelected" type="hidden" value="false">
+                Take a mobile phone if possible, in case symptoms get worse and an ambulance is needed.
+              </label>
+              <input data-val="true" data-val-number="The field ItemId must be a number." data-val-required="The ItemId field is required." id="CareAdviceItemSelections_2__ItemId" name="CareAdviceItemSelections[2].ItemId" type="hidden" value="931524">
+
+            </div>
+            <hr class="thinhr">
+            <div class="checkbox">
+
+
+              <label title="Cx525">
+                <input data-val="true" data-val-required="The IsSelected field is required." id="CareAdviceItemSelections_3__IsSelected" name="CareAdviceItemSelections[3].IsSelected" type="checkbox" value="true"><input name="CareAdviceItemSelections[3].IsSelected" type="hidden" value="false">
+                SAFEGUARDING: From what I have heard there may be safeguarding concerns.
+              </label>
+              <input data-val="true" data-val-number="The field ItemId must be a number." data-val-required="The ItemId field is required." id="CareAdviceItemSelections_3__ItemId" name="CareAdviceItemSelections[3].ItemId" type="hidden" value="931525">
+
+            </div>
+            <hr class="thinhr">
+            <div class="checkbox">
+
+
+              <label title="Cx525">
+                <input data-val="true" data-val-required="The IsSelected field is required." id="CareAdviceItemSelections_4__IsSelected" name="CareAdviceItemSelections[4].IsSelected" type="checkbox" value="true"><input name="CareAdviceItemSelections[4].IsSelected" type="hidden" value="false">
+                Before you go, I will just check whether I need to give you any further instructions or advice.
+              </label>
+              <input data-val="true" data-val-number="The field ItemId must be a number." data-val-required="The ItemId field is required." id="CareAdviceItemSelections_4__ItemId" name="CareAdviceItemSelections[4].ItemId" type="hidden" value="931526">
+
+            </div>
+
+          </div>
+
+          <button id="actionButton" class="btn btn-primary" disabled="">Next</button>
+
+        </div>
+      </div> -->
+
+
+
+
+  <div class="audio-care-advice-block">
+<h2>Audio care advice</h2>
+      <a href="/files/computer-generated.mp3">
+        <button class="nhsuk-button" type="submit">
+          Computer generated
+        </button>
+      </a>
+
+      <a href="/files/human-generated.mp3">
+        <button class="nhsuk-button" type="submit">
+          Human generated
+        </button>
+      </a>
+  </div>  
+
+      <br>
+
+  <div class="page-care-advice-block">
+<h2>Care advice page</h2>
+      <a href="simple">
+        <button class="nhsuk-button" type="submit">
+          Simple demo
+        </button>
+      </a>
+
+      <a href="advanced">
+        <button class="nhsuk-button" type="submit">
+          Advanced demo
+        </button>
+      </a>
+</div>
+{% endblock %}

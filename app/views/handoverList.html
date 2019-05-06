@@ -1,0 +1,37 @@
+{% extends 'layouts/layout-transactional.html' %}
+
+{% block pageTitle %}
+  UECDI Care advice demo - Advanced
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h2>
+        111 Patient consultation reports
+      </h2>
+
+    <p>This care advice only relates to this consultation and is valid for 48 hours</p>
+    <!-- handoverList -->
+    <!-- Get handoverId out of handoverList -->
+      <div class="nhsuk-table-responsive">
+         <table class="nhsuk-table">
+           <caption class="nhsuk-table__caption">111 Patient consultation report</caption>
+           <tbody class="nhsuk-table__body">
+              {% for item in handoverList %}
+             <tr class="nhsuk-table__row">
+               <td class="nhsuk-table__cell"><a href="/handover/{{item.handoverId}}">111 Patient consultation report</a></td>
+               <td class="nhsuk-table__cell ">{{ item.handoverId }}</td>
+             </tr>
+             {% endfor %}
+           </tbody>
+         </table>
+       </div>
+
+    <p>Always follow any medical advice you’ve already been given by your doctor. <br>See our <a href="/Help/Terms" target="_blank">terms</a>.</p>
+    
+  </div>
+</div>
+
+{% endblock %}

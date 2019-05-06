@@ -1,0 +1,215 @@
+{% extends 'layouts/layout-transactional.html' %}
+
+{% block pageTitle %}
+  UECDI Care advice demo - Advanced
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-u-margin-top-4">
+        111 Patient consultation report
+      </h1>
+
+    <p>This care advice only relates to this consultation and is valid for 48 hours <br><br>
+      Case ID 53b15dac-debd-43e0-9e41-03f428a1a8a7 <br>
+      With reference to your call on 07/09/2017 12:44:41
+    </p>
+
+    <h2>Patient details</h2>
+
+    <div class="nhsuk-table-responsive">
+      <table class="nhsuk-table">
+        <caption class="nhsuk-table__caption">Patient details</caption>
+        <tbody class="nhsuk-table__body">
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">NHS number</td>
+            <td class="nhsuk-table__cell ">485 777 3456</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Name</td>
+            <td class="nhsuk-table__cell ">John Bloggs</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Date of birth</td>
+            <td class="nhsuk-table__cell ">07/09/1967</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Address</td>
+            <td class="nhsuk-table__cell ">2 St Hilds Court <br>
+          Renny's Ln <br>
+          DH1 2HP</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">GP Details</td>
+            <td class="nhsuk-table__cell ">
+            Dr M Khan. <br>
+            Dunelm Medical Practice <br>
+            Gilesgate Medical Centre <br>
+            Sunderland Rd <br>
+            Durham DH1 2QQ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+      <h2>
+        Medical details
+      </h2>
+
+      <div class="nhsuk-table-responsive">
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption">Medical details</caption>
+          <tbody class="nhsuk-table__body">
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Allergies</td>
+              <td class="nhsuk-table__cell ">No allergies</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Conditions</td>
+              <td class="nhsuk-table__cell ">Asthma <br>
+            Disabilities, including physical and learning disabilities</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <h2>
+        Assessment summary
+      </h2>
+
+      <p>
+        <ul>
+        <li>Illness - palpatations</li>
+        <li>Warm to touch</li>
+        <li>Palpitations present at time of assessment</li>
+        </ul>
+      </p>
+
+      <h2>
+        Care advice
+      </h2>
+
+
+<section class="local-header">
+    <div class="measure">
+        <h1 class="local-header__title">Go to an emergency treatment centre urgently</h1>
+        <div class="local-header__intro">
+            <p>You should go within the next 1 hour</p>
+        </div>
+    </div>
+</section>
+
+<div class="spacer"></div>
+
+<h2>Selected service</h2>
+
+Emergency Department
+<br>The Friarage Hospital
+<br> Bullamoor Road
+<br> Northallerton
+<br> DL6 1JG
+<br> Open today: 24 hours
+
+<div class="spacer"></div>
+
+<details class="nhsuk-details nhsuk-expander">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">
+      View map to service
+    </span>
+  </summary>
+  <div class="nhsuk-details__text">
+    
+    <div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+    
+  </div>
+</details>
+
+
+<div class="spacer"></div>
+
+<section class="outcome-additional-info measure">
+  <h2 class="heading-medium">
+    Appointment details
+  </h2>
+  <ul>
+    <li>There is no appointment required</li>
+  </ul>
+</section>
+
+
+<section class="outcome-additional-info measure">
+  <h2 class="heading-medium">
+    Before you go
+  </h2>
+  <ul>
+    <li>get someone to take you, don't drive yourself</li>
+    <li>take all your current medicines with you</li>
+  </ul>
+</section>
+
+<hr class="alternative-care-hr">
+
+<div class="care-advice measure">
+
+
+  <div class="nhsuk-care-card nhsuk-care-card--urgent">
+    <div class="nhsuk-care-card__heading-container">
+      <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>What you can do in the meantime</span></h3>
+      <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
+    </div>
+    <div class="nhsuk-care-card__content">
+
+        <ul>
+          <li>
+            Drinking caffeine, alcohol, smoking or taking decongestants can all make the problem worse.
+          </li>
+          <li>
+            Call 999 if:
+            <ul>
+              <li>You're breathless or have pain in your chest which is getting worse.</li>
+              <li>You have pain in your upper tummy (abdomen) or upper back.</li>
+              <li>If palpitations last more than 15 minutes, go straight to the nearest A&amp;E department.</li>
+            </ul>
+          </li>
+        </ul>
+    </div>
+  </div>
+
+
+  <h4 id="Advice_CX221114-Adult-Male" class="heading-small">Further information</h4>
+  <p>
+    <ul>
+    <li><a href="https://www.nhs.uk/conditions/heart-palpitations/">Heart palpitations and ectopic beats </a></li>
+    <li><a href="https://www.nhs.uk/Video/Pages/guide-to-ecg.aspx">Your guide to electrocardiogram (ECG) </a></li>
+    </ul>
+  </p>
+
+
+  <div class='embed-container'>
+    <iframe src='https://www.youtube.com/embed/tSpHo655BP4?rel=0' frameborder='0' allowfullscreen></iframe>
+  </div>
+
+  <div class="nhsuk-care-card nhsuk-care-card--immediate">
+    <div class="nhsuk-care-card__heading-container">
+      <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>Call 111 if your symptoms get worse</span></h3>
+      <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
+    </div>
+    <div class="nhsuk-care-card__content">
+
+        <ul>
+          <li>If there are any new symptoms, or if the condition gets worse, call 111 for advice.</li>
+        </ul>
+    </div>
+  </div>
+
+    <p>Always follow any medical advice you’ve already been given by your doctor. <br>See our <a href="/Help/Terms" target="_blank">terms</a>.</p>
+    
+  </div>
+</div>
+
+{% endblock %}
