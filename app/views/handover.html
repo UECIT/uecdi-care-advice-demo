@@ -18,51 +18,59 @@
     </p>
 
     <!-- Get Patient out of handover Message -->
-    {% for item in handoverMessage.contained[0].entry %}
-      {% if item.resource.resourceType == 'Patient' %}
-      <h2>Patient details</h2>
-      <div class="nhsuk-table-responsive">
-         <table class="nhsuk-table">
-           <caption class="nhsuk-table__caption">Patient details</caption>
-           <tbody class="nhsuk-table__body">
-             <tr class="nhsuk-table__row">
-               <td class="nhsuk-table__cell">NHS number</td>
-               <td class="nhsuk-table__cell ">{{ item.resource.identifier[0].value }}</td>
-             </tr>
-             <tr class="nhsuk-table__row">
-               <td class="nhsuk-table__cell">Name</td>
-               <td class="nhsuk-table__cell ">{{ item.resource.name[0].given[0] }} {{ item.resource.name[0].family }}</td>
-             </tr>
-             <tr class="nhsuk-table__row">
-               <td class="nhsuk-table__cell">Date of birth</td>
-               <td class="nhsuk-table__cell ">{{ item.resource.birthDate }}</td>
-             </tr>
-             <tr class="nhsuk-table__row">
-               <td class="nhsuk-table__cell">Address</td>
-               <td class="nhsuk-table__cell ">
-                 {{ item.resource.address[0].line[0] }}<br>
-                 {{ item.resource.address[0].line[1] }}<br>
-                 {{ item.resource.address[0].line[2] }}<br>
-                 {{ item.resource.address[0].city }}<br>
-                 {{ item.resource.address[0].postalCode }}
-              </td>
-             </tr>
-             <tr class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">GP Details</td>
-              <td class="nhsuk-table__cell ">
-               {{ item.resource.contained[0].name[0].prefix }} {{ item.resource.contained[0].name[0].given[0] }} {{ item.resource.contained[0].name[0].family }}<br>
-               {{ item.resource.contained[0].address[0].line[0] }}<br>
-               {{ item.resource.contained[0].address[0].line[1] }}<br>
-               {{ item.resource.contained[0].address[0].line[2] }}<br>
-               {{ item.resource.contained[0].address[0].city }}<br>
-               {{ item.resource.contained[0].address[0].postalCode }}
-              </td>
-             </tr>
-           </tbody>
-         </table>
-       </div>
+
+    {% for item in handoverMessage.contained %}
+      {% if item.resourceType == 'Bundle'%}
+        {% for bundleItem in item.entry %}
+          {% if bundleItem.resource.resourceType == 'Patient'%}
+          <h2>Patient details</h2>
+          <div class="nhsuk-table-responsive">
+             <table class="nhsuk-table">
+               <caption class="nhsuk-table__caption">Patient details</caption>
+               <tbody class="nhsuk-table__body">
+                 <tr class="nhsuk-table__row">
+                   <td class="nhsuk-table__cell">NHS number</td>
+                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.identifier[0].value }}</td>
+                 </tr>
+                 <tr class="nhsuk-table__row">
+                   <td class="nhsuk-table__cell">Name</td>
+                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.name[0].given[0] }} {{ bundleItem.resource.name[0].family }}</td>
+                 </tr>
+                 <tr class="nhsuk-table__row">
+                   <td class="nhsuk-table__cell">Date of birth</td>
+                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.birthDate }}</td>
+                 </tr>
+                 <tr class="nhsuk-table__row">
+                   <td class="nhsuk-table__cell">Address</td>
+                   <td class="nhsuk-table__cell ">
+                     {{ bundleItem.resource.address[0].line[0] }}<br>
+                     {{ bundleItem.resource.address[0].line[1] }}<br>
+                     {{ bundleItem.resource.address[0].line[2] }}<br>
+                     {{ bundleItem.resource.address[0].city }}<br>
+                     {{ bundleItem.resource.address[0].postalCode }}
+                  </td>
+                 </tr>
+                 <tr class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">GP Details</td>
+                  <td class="nhsuk-table__cell ">
+                   {{ bundleItem.resource.contained[1].name[0].prefix }} {{ bundleItem.resource.contained[1].name[0].given[0] }} {{ bundleItem.resource.contained[1].name[0].family }}<br>
+                   {{ bundleItem.resource.contained[1].address[0].line[0] }}<br>
+                   {{ bundleItem.resource.contained[1].address[0].line[1] }}<br>
+                   {{ bundleItem.resource.contained[1].address[0].line[2] }}<br>
+                   {{ bundleItem.resource.contained[1].address[0].city }}<br>
+                   {{ bundleItem.resource.contained[1].address[0].postalCode }}
+                  </td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+          {% endif %}
+        {% endfor %}
       {% endif %}
     {% endfor %}
+
+
+    
 
       <h2>
         Medical details
@@ -91,9 +99,13 @@
       <p>
         <ul>
            <!-- Get Observations out of handover Message -->
-           {% for item in handoverMessage.contained[0].entry %}
-            {% if item.resource.resourceType == 'Observation' %}
-            <li>{{ item.resource.code.coding[0].display }}</li>
+           {% for item in handoverMessage.contained %}
+            {% if item.resourceType == 'Bundle'%}
+              {% for bundleItem in item.entry %}
+                {% if bundleItem.resource.resourceType == 'Observation'%}
+                  <li>{{ bundleItem.resource.code.coding[0].display }}</li>
+                {% endif %}
+              {% endfor %}
             {% endif %}
           {% endfor %}
         </ul>
@@ -108,11 +120,15 @@
     <div class="measure">
         <h1 class="local-header__title">{{handoverMessage.description}}</h1>
         <div class="local-header__intro">
-          {% for item in handoverMessage.contained[0].entry %}
-            {% if item.resource.resourceType == 'CarePlan'%}
-              {% if item.resource.title == 'Result'%}
-                <p>{{item.resource.description}}</p>
-              {% endif %}
+          {% for item in handoverMessage.contained %}
+            {% if item.resourceType == 'Bundle'%}
+              {% for bundleItem in item.entry %}
+                {% if bundleItem.resource.resourceType == 'CarePlan'%}
+                  {% if bundleItem.resource.title == 'Result'%}
+                    <p>{{bundleItem.resource.description}}</p>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
             {% endif %}
           {% endfor %}
         </div>
@@ -123,12 +139,14 @@
 
 <h2>Selected service</h2>
 
-{% for item in handoverMessage.contained[0].entry %}
-  {% if item.resource.resourceType == 'Practitioner'%}
-    {{ item.resource.address[0].line[0] }}<br>
-    {{ item.resource.address[0].line[1] }}<br>
-    {{ item.resource.address[0].city }}<br>
-    {{ item.resource.address[0].postalCode }}
+{% for item in handoverMessage.contained %}
+  {% if item.resourceType == 'Practitioner'%}
+    {% if item.id == 'recipientPractitioner'%}
+      {{ item.address[0].line[0] }}<br>
+      {{ item.address[0].line[1] }}<br>
+      {{ item.address[0].city }}<br>
+      {{ item.address[0].postalCode }}
+    {% endif %}
   {% endif %}
 {% endfor %}
 
@@ -155,7 +173,11 @@
     Appointment details
   </h2>
   <ul>
-    <li>There is no appointment required</li>
+    {% for item in handoverMessage.contained %}
+      {% if item.resourceType == 'Appointment'%}
+        <li>{{item.description}}</li>
+      {% endif %}
+    {% endfor %}
   </ul>
 </section>
 
@@ -165,13 +187,17 @@
     Before you go
   </h2>
   <ul>
-      {% for item in handoverMessage.contained[0].entry %}
-      {% if item.resource.resourceType == 'CarePlan'%}
-        {% if item.resource.title == 'Before you go'%}
-          <li>{{item.resource.description}}</li>
+      {% for item in handoverMessage.contained %}
+        {% if item.resourceType == 'Bundle'%}
+          {% for bundleItem in item.entry %}
+            {% if bundleItem.resource.resourceType == 'CarePlan'%}
+              {% if bundleItem.resource.title == 'Before you go'%}
+                <li>{{bundleItem.resource.description}}</li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
         {% endif %}
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
   </ul>
 </section>
 
@@ -187,13 +213,17 @@
     </div>
     <div class="nhsuk-care-card__content">
         <ul>
-          {% for item in handoverMessage.contained[0].entry %}
-            {% if item.resource.resourceType == 'CarePlan'%}
-              {% if item.resource.title == 'What you can do in the meantime'%}
-                <li>{{item.resource.description}}</li>
+            {% for item in handoverMessage.contained %}
+              {% if item.resourceType == 'Bundle'%}
+                {% for bundleItem in item.entry %}
+                  {% if bundleItem.resource.resourceType == 'CarePlan'%}
+                    {% if bundleItem.resource.title == 'What you can do in the meantime'%}
+                      <li>{{bundleItem.resource.description}}</li>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
               {% endif %}
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
         </ul>
     </div>
   </div>
