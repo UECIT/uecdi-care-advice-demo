@@ -8,9 +8,9 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
 
-      <h1 class="nhsuk-u-margin-top-4">
-        111 Patient consultation report
-      </h1>
+    <h1 class="nhsuk-u-margin-top-4">
+      111 Patient consultation report
+    </h1>
 
     <p>This care advice only relates to this consultation and is valid for 48 hours <br><br>
       Case ID {{handoverMessage.id}} <br>
@@ -102,7 +102,7 @@
            {% for item in handoverMessage.contained %}
             {% if item.resourceType == 'Bundle'%}
               {% for bundleItem in item.entry %}
-                {% if bundleItem.resource.resourceType == 'Observation'%}
+                {% if bundleItem.resource.resourceType == 'Observation' %}
                   <li>{{ bundleItem.resource.code.coding[0].display }}</li>
                 {% endif %}
               {% endfor %}
@@ -160,7 +160,10 @@
   </summary>
   <div class="nhsuk-details__text">
     
-    <div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+    <div class='embed-container'>
+      <iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758'
+              width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
+    </div>
     
   </div>
 </details>
@@ -232,35 +235,35 @@
   <h4 id="Advice_CX221114-Adult-Male" class="heading-small">Further information</h4>
   <p>
     <ul>
-    {% if handoverMessage.supportingInfo[0].display.includes('Vomiting')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Vomiting') %#}
       <li><a href="https://www.nhs.uk/conditions/diarrhoea-and-vomiting/">Diarrhoea and vomiting </a></li>
       <li><a href="https://www.nhs.uk/video/Pages/Feverandvomiting.aspx">Your guide to Fever and vomiting </a></li>
-    {% endif %}
+    {#% endif %#}
 
-    {% if handoverMessage.supportingInfo[0].display.includes('Headache')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Headache') %#}
       <li><a href="https://www.nhs.uk/conditions/headaches/">Headaches </a></li>
       <li><a href="https://www.nhs.uk/video/Pages/Headaches.aspx">Your guide to Headaches </a></li>
-    {% endif %}
+    {#% endif %#}
 
-    {% if handoverMessage.supportingInfo[0].display.includes('Leg injury')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Leg injury') %#}
       <li><a href="https://www.nhs.uk/live-well/exercise/knee-pain-and-other-running-injuries/">Knee pain and other running injuries </a></li>
       <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {% endif %}
+    {#% endif %#}
 
-    {% if handoverMessage.supportingInfo[0].display.includes('Hand injury')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Hand injury') %#}
       <li><a href="https://www.nhs.uk/conditions/sprains-and-strains/">Sprains and strains </a></li>
       <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {% endif %}
+    {#% endif %#}
 
-    {% if handoverMessage.supportingInfo[0].display.includes('Palpitations')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Palpitations') %#}
       <li><a href="https://www.nhs.uk/conditions/heart-palpitations/">Heart palpitations and ectopic beats </a></li>
       <li><a href="https://www.nhs.uk/Video/Pages/guide-to-ecg.aspx">Your guide to electrocardiogram (ECG) </a></li>
-    {% endif %}
+    {#% endif %#}
 
-    {% if handoverMessage.supportingInfo[0].display.includes('Mental Health')%}
+    {#% if handoverMessage.supportingInfo[0].display.includes('Mental Health') %#}
       <li><a href="https://www.nhs.uk/conditions/stress-anxiety-depression/mental-health-helplines/">Mental health helplines </a></li>
       <li><a href="https://www.nhs.uk/video/Pages/Talkingtherapies.aspx">Your guide to Mental and emotional health: talking therapies </a></li>
-    {% endif %}
+    {#% endif %#}
     </ul>
   </p>
 
