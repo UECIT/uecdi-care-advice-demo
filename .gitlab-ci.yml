@@ -1,0 +1,34 @@
+image: node:10-buster
+
+stages:
+    - deploy
+
+eb-develop:
+    stage: deploy
+    script:
+        - apt update
+        - apt install zip
+        - zip -r $CI_PROJECT_NAME-develop-$CI_COMMIT_SHORT_SHA-eb.zip .
+    only:
+        - develop
+    artifacts:
+        expire_in: 1 week
+        paths:
+            - "*-eb.zip"
+            - README.md
+
+eb-branches:
+    stage: deploy
+    script:
+        - apt update
+        - apt install zip
+        - zip -r $CI_PROJECT_NAME-branch-$CI_COMMIT_REF_SLUG-eb.zip .
+    only:
+        - branches
+    except:
+        - develop
+    artifacts:
+        expire_in: 1 week
+        paths:
+            - "*-eb.zip"
+            - README.md

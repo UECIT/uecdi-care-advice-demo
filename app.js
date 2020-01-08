@@ -20,7 +20,7 @@ const config = require('./app/config');
 const locals = require('./app/locals');
 const routes = require('./app/routes');
 const documentationRoutes = require('./docs/documentation_routes');
-const utils = require('./lib/utils.js')
+const utils = require('./lib/utils.js');
 
 // Set configuration variables
 const port = 5000;
@@ -180,18 +180,21 @@ app.get(/^([^.]+)$/, function (req, res, next) {
 
  // Database connectivity
  const Sequelize = require("sequelize");
- let database = new Sequelize('cdss_uecdi', 'root', 'password', {
+ const database = new Sequelize({
    dialect: 'mysql',
-   host: "localhost",
-   port: 3306,
- })
+   database: 'cdss_uecdi',
+   host: process.env.DB_HOST,
+   port: process.env.DB_PORT,
+   username: process.env.DB_USER,
+   password: process.env.DB_PASS,
+ });
 
- let handoverMessageEntry = database.define("handover", {
+ const handoverMessageEntry = database.define("handover", {
    handoverId: {
      type: Sequelize.BIGINT,
      primaryKey: true
    },
-   handoverJson: Sequelize.TEXT
+   handoverJson: new Sequelize.TEXT('medium')
  }, {
    timestamps: false
  });
@@ -199,6 +202,7 @@ app.get(/^([^.]+)$/, function (req, res, next) {
  // Route post to handover page
  app.post("/handover", function (req, res, next) {
    const handoverMessage = req.body;
+   console.info("Saving handover " + handoverMessage.id);
    handoverMessageEntry.sync({
      force: false
    }).then(() => {
@@ -212,6 +216,7 @@ app.get(/^([^.]+)$/, function (req, res, next) {
 
  // Route Get to handover page
  app.get('/handover/list', function (req, res, next) {
+  console.info("Retrieving all handover messages");
   handoverMessageEntry.findAll({
     attributes: ['handoverId'],
   }).then(handoverList => {
@@ -224,6 +229,7 @@ app.get(/^([^.]+)$/, function (req, res, next) {
 
  // Route Get to handover page
  app.get('/handover/:id', function (req, res, next) {
+   console.info("Retrieving handover " + req.params.id);
   handoverMessageEntry.findByPk(req.params.id).then(handover => {
     console.log("handover message:", JSON.stringify(handover));
     const handoverMessage = JSON.parse(handover.handoverJson);
@@ -307,6 +313,6 @@ app.use(function (err, req, res, next) {
 })
 
 // Run the application
-app.listen(port);
+app.listen(port, () => console.log("Listening on port " + port));
 
 module.exports = app;
