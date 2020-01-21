@@ -22,6 +22,8 @@ const routes = require('./app/routes');
 const documentationRoutes = require('./docs/documentation_routes');
 const utils = require('./lib/utils.js');
 
+const reports = require('./app/services/report-service.js');
+
 // Set configuration variables
 const port = 5000;
 const useDocumentation = process.env.SHOW_DOCS || config.useDocumentation;
@@ -239,6 +241,22 @@ app.get(/^([^.]+)$/, function (req, res, next) {
   });
 });
 
+// Route post to encounter report (could change to /report)?
+app.get('/report', async function (req, res, next) {
+
+  // Captures a url that ends with Encounter/*
+  const urlPattern = /^(https?:\/\/(?:[^\/]+\/)*)Encounter\/([^\/]+\/?)$/;
+  const [, host, encounterId] = urlPattern.exec(req.query.encounter);
+  const report = await reports.getReport(encounterId, host);
+  const referralRequest = report.entry
+    .map(e => e.resource)
+    .filter(r => r.resourceType == 'ReferralRequest')
+    .sort((a, b) => a.id - b.id)[0];
+
+    res.render("handover.html", {
+      "handoverMessage": referralRequest
+    });
+})
 
 
 
