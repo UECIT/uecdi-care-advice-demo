@@ -241,12 +241,37 @@ app.get(/^([^.]+)$/, function (req, res, next) {
   });
 });
 
-// Route post to encounter report (could change to /report)?
-app.get('/report', async function (req, res, next) {
+function parseUrl(url, origin) {
+  
+  // Captures an absolute url that ends with Encounter/*
+  const absoluteUrlPattern = /^(https?:\/\/(?:[^\/]+\/)*)Encounter\/([^\/]+\/?)$/;
 
-  // Captures a url that ends with Encounter/*
-  const urlPattern = /^(https?:\/\/(?:[^\/]+\/)*)Encounter\/([^\/]+\/?)$/;
-  const [, host, encounterId] = urlPattern.exec(req.query.encounter);
+  // Captures a relative url that ends with Encounter/*
+  const relativeUrlPattern = /^\/(?:[^\/]+\/)*Encounter\/[^\/]+\/?$/;
+
+  if (relativeUrlPattern.test(url)) {
+    if (origin.endsWith("/")) {
+      origin = origin.slice(0, -1);
+    }
+    url = origin + url;
+  }
+
+  if (absoluteUrlPattern.test(url)) {
+    const [, host, encounterId] = absoluteUrlPattern.exec(url);
+    return { host, encounterId };
+  }
+
+  return { host: undefined, encounterId: undefined };
+}
+
+// Route post to encounter report
+app.get('/report', async function (req, res, next) {
+  const { host, encounterId } = parseUrl(req.query.encounter, req.get("referer"));
+  if (!host) {
+    res.status(400).send("Could not parse " + req.query.encounter);
+    return;
+  }
+
   const report = await reports.getReport(encounterId, host);
   const referralRequest = report.entry
     .map(e => e.resource)
@@ -256,8 +281,7 @@ app.get('/report', async function (req, res, next) {
     res.render("handover.html", {
       "handoverMessage": referralRequest
     });
-})
-
+});
 
 
 
