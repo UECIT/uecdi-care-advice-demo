@@ -13,8 +13,8 @@
     </h1>
 
     <p>This care advice only relates to this consultation and is valid for 48 hours <br><br>
-      Case ID {{handoverMessage.id}} <br>
-      With reference to your call on 07/09/2017 12:44:41
+      Case ID {{encounter.id}} <br>
+      With reference to your call on {{encounter.period.start | formatDate}} at {{encounter.period.start | formatTime }}
     </p>
 
     <!-- Get Patient out of handover Message -->
@@ -86,7 +86,7 @@
             </tr>
             <tr class="nhsuk-table__row">
               <td class="nhsuk-table__cell">Conditions</td>
-              <td class="nhsuk-table__cell ">Asthma</td>
+              <td class="nhsuk-table__cell ">{{referralRequest.reasonReference[0].display}}</td>
             </tr>
           </tbody>
         </table>
@@ -231,42 +231,16 @@
     </div>
   </div>
 
-
   <h4 id="Advice_CX221114-Adult-Male" class="heading-small">Further information</h4>
   <p>
     <ul>
-    {#% if handoverMessage.supportingInfo[0].display.includes('Vomiting') %#}
-      <li><a href="https://www.nhs.uk/conditions/diarrhoea-and-vomiting/">Diarrhoea and vomiting </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Feverandvomiting.aspx">Your guide to Fever and vomiting </a></li>
-    {#% endif %#}
-
-    {#% if handoverMessage.supportingInfo[0].display.includes('Headache') %#}
-      <li><a href="https://www.nhs.uk/conditions/headaches/">Headaches </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Headaches.aspx">Your guide to Headaches </a></li>
-    {#% endif %#}
-
-    {#% if handoverMessage.supportingInfo[0].display.includes('Leg injury') %#}
-      <li><a href="https://www.nhs.uk/live-well/exercise/knee-pain-and-other-running-injuries/">Knee pain and other running injuries </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {#% endif %#}
-
-    {#% if handoverMessage.supportingInfo[0].display.includes('Hand injury') %#}
-      <li><a href="https://www.nhs.uk/conditions/sprains-and-strains/">Sprains and strains </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {#% endif %#}
-
-    {#% if handoverMessage.supportingInfo[0].display.includes('Palpitations') %#}
-      <li><a href="https://www.nhs.uk/conditions/heart-palpitations/">Heart palpitations and ectopic beats </a></li>
-      <li><a href="https://www.nhs.uk/Video/Pages/guide-to-ecg.aspx">Your guide to electrocardiogram (ECG) </a></li>
-    {#% endif %#}
-
-    {#% if handoverMessage.supportingInfo[0].display.includes('Mental Health') %#}
-      <li><a href="https://www.nhs.uk/conditions/stress-anxiety-depression/mental-health-helplines/">Mental health helplines </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Talkingtherapies.aspx">Your guide to Mental and emotional health: talking therapies </a></li>
-    {#% endif %#}
+      {% for resource in referralRequest.contained %}
+        {% if resource.resourceType == 'Observation'%}
+          <li><a href="https://www.nhs.uk/search/?q={{resource.code.coding[0].display}}">{{resource.code.coding[0].display}} </a></li>
+        {% endif %}
+      {% endfor %}
     </ul>
-  </p>
-
+  </P>
 
   <div class='embed-container'>
     <iframe src='https://www.youtube.com/embed/tSpHo655BP4?rel=0' frameborder='0' allowfullscreen></iframe>
