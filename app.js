@@ -277,10 +277,14 @@ app.get('/report', async function (req, res, next) {
     .map(e => e.resource)
     .filter(r => r.resourceType == 'ReferralRequest')
     .sort((a, b) => a.id - b.id)[0];
-
-    res.render("handover.html", {
-      "handoverMessage": referralRequest
-    });
+  const encounter = report.entry
+    .map(e => e.resource)
+    .find(r => r.resourceType == 'Encounter');
+  res.render("handover.html", {
+    "encounter": encounter,
+    "referralRequest": referralRequest,
+    "handoverMessage": referralRequest
+  });
 });
 
 
