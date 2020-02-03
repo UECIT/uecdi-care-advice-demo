@@ -18,59 +18,51 @@
     </p>
 
     <!-- Get Patient out of handover Message -->
-
-    {% for item in handoverMessage.contained %}
-      {% if item.resourceType == 'Bundle'%}
-        {% for bundleItem in item.entry %}
-          {% if bundleItem.resource.resourceType == 'Patient'%}
-          <h2>Patient details</h2>
-          <div class="nhsuk-table-responsive">
-             <table class="nhsuk-table">
-               <caption class="nhsuk-table__caption">Patient details</caption>
-               <tbody class="nhsuk-table__body">
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">NHS number</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.identifier[0].value }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Name</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.name[0].given[0] }} {{ bundleItem.resource.name[0].family }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Date of birth</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.birthDate }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Address</td>
-                   <td class="nhsuk-table__cell ">
-                     {{ bundleItem.resource.address[0].line[0] }}<br>
-                     {{ bundleItem.resource.address[0].line[1] }}<br>
-                     {{ bundleItem.resource.address[0].line[2] }}<br>
-                     {{ bundleItem.resource.address[0].city }}<br>
-                     {{ bundleItem.resource.address[0].postalCode }}
-                  </td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                  <td class="nhsuk-table__cell">GP Details</td>
-                  <td class="nhsuk-table__cell ">
-                   {{ bundleItem.resource.contained[1].name[0].prefix }} {{ bundleItem.resource.contained[1].name[0].given[0] }} {{ bundleItem.resource.contained[1].name[0].family }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[0] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[1] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[2] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].city }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].postalCode }}
-                  </td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-
-
-    
+    {% if patient %}
+    <h2>Patient details</h2>
+    <div class="nhsuk-table-responsive">
+       <table class="nhsuk-table">
+         <caption class="nhsuk-table__caption">Patient details</caption>
+         <tbody class="nhsuk-table__body">
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">NHS number</td>
+             <td class="nhsuk-table__cell ">{{ patient.identifier[0].value }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Name</td>
+             <td class="nhsuk-table__cell ">{{ patient.name[0].given[0] }} {{ patient.name[0].family }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Date of birth</td>
+             <td class="nhsuk-table__cell ">{{ patient.birthDate }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Address</td>
+             <td class="nhsuk-table__cell ">
+               {{ patient.address[0].line[0] }}<br>
+               {{ patient.address[0].line[1] }}<br>
+               {{ patient.address[0].line[2] }}<br>
+               {{ patient.address[0].city }}<br>
+               {{ patient.address[0].postalCode }}
+            </td>
+           </tr>
+           {% if gp %}
+             <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">GP Details</td>
+              <td class="nhsuk-table__cell ">
+               {{ gp.name[0].prefix }} {{ gp.name[0].given[0] }} {{ gp.name[0].family }}<br>
+               {{ gp.address[0].line[0] }}<br>
+               {{ gp.address[0].line[1] }}<br>
+               {{ gp.address[0].line[2] }}<br>
+               {{ gp.address[0].city }}<br>
+               {{ gp.address[0].postalCode }}
+              </td>
+             </tr>
+           {% endif %}
+         </tbody>
+       </table>
+     </div>
+    {% endif %}
 
       <h2>
         Medical details
