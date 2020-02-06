@@ -275,10 +275,12 @@ app.get('/report', async function (req, res, next) {
       patient: await report.patient(),
       gp: await report.gp(),
       referralRequest: report.referralRequest(),
-      handoverMessage: report.handoverMessage()
+      handoverMessage: report.handoverMessage(),
+      selectedService: await report.selectedService(),
+      selectedServiceLocation: await report.selectedServiceLocation()
     });
   } catch (e) {
-    console.log(e);
+    console.log(e.stack);
     res.status(500).send("Failed to process report: " + e.message);
   }
 });
