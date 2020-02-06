@@ -6,10 +6,16 @@ function getId(resource) {
 }
 
 class Report {
+
   constructor(baseUrl, bundle) {
     this.baseUrl = baseUrl;
     this.bundle = bundle;
     this.resolved = {};
+
+    this._encounter = null;
+    this._referralRequest = null;
+    this._selectedService = null;
+    this._selectedServiceLocation = null;
   }
 
   async resolve(reference, parent) {
@@ -19,7 +25,6 @@ class Report {
       return resolvedElement;
     }
 
-    // TODO resolve external references relative to the parent bundle entry, not the bundle base URL
     console.log("Resolve", reference);
     resolvedElement =
         this.findContained(id, parent) ||
@@ -34,7 +39,6 @@ class Report {
   findContained(reference, parent) {
     if (reference.startsWith('#') && parent.contained) {
       return parent.contained
-      .map(entry => entry.resource)
       .find(resource => resource.id === reference.substr(1));
     }
 
@@ -85,6 +89,36 @@ class Report {
 
   handoverMessage() {
     return this.referralRequest();
+  }
+
+  async selectedService() {
+    if (!this._selectedService) {
+      let referralRequest = this.referralRequest();
+      if (!referralRequest
+          || !referralRequest.recipient
+          || referralRequest.recipient.length === 0) {
+        return null;
+      }
+
+      this._selectedService =
+          await this.resolve(referralRequest.recipient[0], referralRequest);
+    }
+    return this._selectedService;
+  }
+
+  async selectedServiceLocation() {
+    if (!this._selectedServiceLocation) {
+      let selectedService = await this.selectedService();
+      if (!selectedService
+          || !selectedService.location
+          || selectedService.location.length === 0) {
+        return null;
+      }
+
+      this._selectedServiceLocation
+          = await this.resolve(selectedService.location[0], selectedService);
+    }
+    return this._selectedServiceLocation;
   }
 
 }

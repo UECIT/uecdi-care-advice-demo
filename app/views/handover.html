@@ -131,34 +131,39 @@
 
 <h2>Selected service</h2>
 
-{% for item in handoverMessage.contained %}
-  {% if item.resourceType == 'Practitioner'%}
-    {% if item.id == 'recipientPractitioner'%}
-      {{ item.address[0].line[0] }}<br>
-      {{ item.address[0].line[1] }}<br>
-      {{ item.address[0].city }}<br>
-      {{ item.address[0].postalCode }}
+{% if selectedServiceLocation %}
+    {{ selectedServiceLocation.address.line[0] }}<br>
+    {% if selectedServiceLocation.address.line[1] %}
+      {{ selectedServiceLocation.address.line[1] }}<br>
     {% endif %}
-  {% endif %}
-{% endfor %}
+    {% if selectedServiceLocation.address.line[2] %}
+      {{ selectedServiceLocation.address.line[2] }}<br>
+    {% endif %}
+    {% if selectedServiceLocation.address.city %}
+      {{ selectedServiceLocation.address.city }}<br>
+    {% endif %}
+    {{ selectedServiceLocation.address.postalCode }}
 
-<div class="spacer"></div>
+    <div class="spacer"></div>
 
-<details class="nhsuk-details nhsuk-expander">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">
-      View map to service
-    </span>
-  </summary>
-  <div class="nhsuk-details__text">
-    
-    <div class='embed-container'>
-      <iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758'
-              width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
-    </div>
-    
-  </div>
-</details>
+    <details class="nhsuk-details nhsuk-expander">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">
+          View map to service
+        </span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <div class='embed-container'>
+          <iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758'
+                  width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
+        </div>
+        <p>
+          NOTE: Dynamic embedded maps require an API key, so the above is a static example.
+          <a target="_blank" href='https://www.google.com/maps/search/?api=1&query={{ selectedServiceLocation.address.line[0] }},+{{ selectedServiceLocation.address.postalCode }}'>Search on Google Maps</a>
+        </p>
+      </div>
+    </details>
+{% endif %}
 
 
 <div class="spacer"></div>
@@ -252,7 +257,7 @@
   </div>
 
     <p>Always follow any medical advice you’ve already been given by your doctor. <br>See our <a href="/Help/Terms" target="_blank">terms</a>.</p>
-    
+
   </div>
 </div>
 
