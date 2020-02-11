@@ -16,6 +16,9 @@ class Report {
     this._referralRequest = null;
     this._selectedService = null;
     this._selectedServiceLocation = null;
+    this._conditions = null;
+    this._observations = null;
+    this._carePlans = null;
   }
 
   async resolve(reference, parent) {
@@ -119,6 +122,24 @@ class Report {
           = await this.resolve(selectedService.location[0], selectedService);
     }
     return this._selectedServiceLocation;
+  }
+
+  observations() {
+    return this._observations || (this._observations = this.bundle.entry
+    .map(e => e.resource)
+    .filter(r => r.resourceType === 'Observation'));
+  }
+
+  conditions() {
+    return this._conditions || (this._conditions = this.bundle.entry
+    .map(e => e.resource)
+    .filter(r => r.resourceType === 'Condition'));
+  }
+
+  carePlans() {
+    return this._carePlans || (this._carePlans = this.bundle.entry
+    .map(e => e.resource)
+    .filter(r => r.resourceType === 'CarePlan'));
   }
 
 }
