@@ -271,6 +271,7 @@ app.get('/report', async function (req, res, next) {
     const report = await reports.getReport(encounterId, host);
     let input = {
       encounter: report.encounter(),
+      appointment: report.appointment(),
       patient: await report.patient(),
       gp: await report.gp(),
       referralRequest: report.referralRequest(),

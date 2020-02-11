@@ -156,13 +156,14 @@
   <h2 class="heading-medium">
     Appointment details
   </h2>
-  <ul>
-    {% for item in handoverMessage.contained %}
-      {% if item.resourceType == 'Appointment'%}
-        <li>{{item.description}}</li>
-      {% endif %}
-    {% endfor %}
-  </ul>
+  <p>{{appointment.description}}</p>
+  <p>Type: {{appointment.appointmentType.text}}</p>
+  <p>Your appointment will be on {{appointment.start | formatDate}} at {{appointment.start | formatTime }}</p>
+  <p>Main reason for the appointment: {{appointment.reason[0].text}}</p>
+  <h4>Service details</h4>
+  <p>Service type: {{appointment.serviceType[0].text}}</p>
+  <p>Service category: {{appointment.serviceCategory.text}}</p>
+  <p>Service specialty: {{appointment.specialty[0].text}}</p>
 </section>
 
 {% if carePlans.length %}
@@ -193,7 +194,7 @@
       <!--  TODO -->
       {% for resource in referralRequest.contained %}
         {% if resource.resourceType == 'Observation'%}
-          <li><a href="https://www.nhs.uk/search/?q={{resource.code.coding[0].display}}">{{resource.code.coding[0].display}} </a></li>
+          <li><a href="https://www.nhs.uk/search/?q={{resource.code.coding[0].display}}">{{resource.code.coding[0].display}}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -209,7 +210,6 @@
       <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
     </div>
     <div class="nhsuk-care-card__content">
-
         <ul>
           <li>If there are any new symptoms, or if the condition gets worse, call 111 for advice.</li>
         </ul>

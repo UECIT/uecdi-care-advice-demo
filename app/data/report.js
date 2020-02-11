@@ -14,6 +14,7 @@ class Report {
 
     this._encounter = null;
     this._referralRequest = null;
+    this._appointment = null;
     this._selectedService = null;
     this._selectedServiceLocation = null;
     this._conditions = null;
@@ -81,6 +82,12 @@ class Report {
     return this._encounter || (this._encounter = this.bundle.entry
     .map(e => e.resource)
     .find(r => r.resourceType === 'Encounter'));
+  }
+
+  appointment() {
+    return this._appointment || (this._appointment = this.bundle.entry
+    .map(e => e.resource)
+    .find(r => r.resourceType.endsWith('Appointment')));
   }
 
   referralRequest() {
