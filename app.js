@@ -269,16 +269,20 @@ app.get('/report', async function (req, res, next) {
 
   try {
     const report = await reports.getReport(encounterId, host);
-    console.log(report);
-    res.render("handover.html", {
+    let input = {
       encounter: report.encounter(),
       patient: await report.patient(),
       gp: await report.gp(),
       referralRequest: report.referralRequest(),
       handoverMessage: report.handoverMessage(),
       selectedService: await report.selectedService(),
-      selectedServiceLocation: await report.selectedServiceLocation()
-    });
+      selectedServiceLocation: await report.selectedServiceLocation(),
+      observations: report.observations(),
+      conditions: report.conditions(),
+      carePlans: report.carePlans()
+    };
+    // console.log(input);
+    res.render("handover.html", input);
   } catch (e) {
     console.log(e.stack);
     res.status(500).send("Failed to process report: " + e.message);

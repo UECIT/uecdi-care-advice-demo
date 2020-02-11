@@ -73,12 +73,16 @@
           <caption class="nhsuk-table__caption">Medical details</caption>
           <tbody class="nhsuk-table__body">
             <tr class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">Allergies</td>
-              <td class="nhsuk-table__cell ">No allergies</td>
+              <td class="nhsuk-table__cell">Conditions</td>
+              <td class="nhsuk-table__cell ">
+                {% for condition in conditions %}
+                  {{ condition.code.coding[0].display }}<br>
+                {% endfor %}
+              </td>
             </tr>
             <tr class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">Conditions</td>
-              <td class="nhsuk-table__cell ">{{referralRequest.reasonReference[0].display}}</td>
+              <td class="nhsuk-table__cell">Allergies</td>
+              <td class="nhsuk-table__cell ">No allergies</td>
             </tr>
           </tbody>
         </table>
@@ -88,39 +92,19 @@
         Assessment summary
       </h2>
 
-      <p>
-        <ul>
-           <!-- Get Observations out of handover Message -->
-           {% for item in handoverMessage.contained %}
-            {% if item.resourceType == 'Bundle'%}
-              {% for bundleItem in item.entry %}
-                {% if bundleItem.resource.resourceType == 'Observation' %}
-                  <li>{{ bundleItem.resource.code.coding[0].display }}</li>
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </p>
-
-      <h2>
-        Care advice
-      </h2>
-
+      <ul>
+        {% for observation in observations %}
+          <li>{{ observation.code.coding[0].display }}{% if observation.valueString %}: {{ observation.valueString }}{% endif %}</li>
+        {% endfor %}
+      </ul>
 
 <section class="local-header">
     <div class="measure">
-        <h1 class="local-header__title">{{handoverMessage.description}}</h1>
+        <h1 class="local-header__title">{{referralRequest.description}}</h1>
         <div class="local-header__intro">
-          {% for item in handoverMessage.contained %}
-            {% if item.resourceType == 'Bundle'%}
-              {% for bundleItem in item.entry %}
-                {% if bundleItem.resource.resourceType == 'CarePlan'%}
-                  {% if bundleItem.resource.title == 'Result'%}
-                    <p>{{bundleItem.resource.description}}</p>
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
+          {% for carePlan in carePlans %}
+            {% if carePlan.title == 'Result'%}
+              <p>{{carePlan.description}}</p>
             {% endif %}
           {% endfor %}
         </div>
@@ -181,63 +165,39 @@
   </ul>
 </section>
 
+{% if carePlans.length %}
+  <section class="outcome-additional-info measure">
+    <h2 class="heading-medium">
+      Care Advice
+    </h2>
 
-<section class="outcome-additional-info measure">
-  <h2 class="heading-medium">
-    Before you go
-  </h2>
-  <ul>
-      {% for item in handoverMessage.contained %}
-        {% if item.resourceType == 'Bundle'%}
-          {% for bundleItem in item.entry %}
-            {% if bundleItem.resource.resourceType == 'CarePlan'%}
-              {% if bundleItem.resource.title == 'Before you go'%}
-                <li>{{bundleItem.resource.description}}</li>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-  </ul>
-</section>
-
-<hr class="alternative-care-hr">
-
-<div class="care-advice measure">
-
-
-  <div class="nhsuk-care-card nhsuk-care-card--urgent">
-    <div class="nhsuk-care-card__heading-container">
-      <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>What you can do in the meantime</span></h3>
-      <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
+    {% for carePlan in carePlans %}
+    <div class="nhsuk-care-card nhsuk-care-card--urgent">
+      <div class="nhsuk-care-card__heading-container">
+        <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>{{ carePlan.title }}</span></h3>
+        <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
+      </div>
+      <div class="nhsuk-care-card__content">
+          <ul>
+            <li>{{carePlan.description}}</li>
+          </ul>
+      </div>
     </div>
-    <div class="nhsuk-care-card__content">
-        <ul>
-            {% for item in handoverMessage.contained %}
-              {% if item.resourceType == 'Bundle'%}
-                {% for bundleItem in item.entry %}
-                  {% if bundleItem.resource.resourceType == 'CarePlan'%}
-                    {% if bundleItem.resource.title == 'What you can do in the meantime'%}
-                      <li>{{bundleItem.resource.description}}</li>
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-  </div>
+    {% endfor %}
+  </section>
+{% endif %}
 
   <h4 id="Advice_CX221114-Adult-Male" class="heading-small">Further information</h4>
   <p>
     <ul>
+      <!--  TODO -->
       {% for resource in referralRequest.contained %}
         {% if resource.resourceType == 'Observation'%}
           <li><a href="https://www.nhs.uk/search/?q={{resource.code.coding[0].display}}">{{resource.code.coding[0].display}} </a></li>
         {% endif %}
       {% endfor %}
     </ul>
-  </P>
+  </p>
 
   <div class='embed-container'>
     <iframe src='https://www.youtube.com/embed/tSpHo655BP4?rel=0' frameborder='0' allowfullscreen></iframe>
