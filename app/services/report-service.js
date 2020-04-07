@@ -4,8 +4,13 @@ const Report = require('../data/report');
 
 async function getReport(id, origin) {
   const encounterReportUrl = `${origin}Encounter?_id=${id}&_include=*&_revinclude=*`;
-
-  const response = await rp.get(encounterReportUrl);
+  let options = {
+    uri: encounterReportUrl,
+    headers: {
+      'Accept': 'application/xml'
+    }
+  }
+  const response = await rp.get(options);
   const bundleObj = fhir.xmlToObj(response);
   return new Report(origin, bundleObj);
 }
