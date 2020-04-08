@@ -62,8 +62,14 @@ class Report {
 
   async fetch(reference) {
     let url = new URL(reference, this.baseUrl);
+    let options = {
+      uri: url.href,
+      headers: {
+        'Accept': 'application/xml'
+      }
+    }
     console.log(`  Fetching from ${url}`);
-    const response = await rp.get(url.href);
+    const response = await rp.get(options);
     return fhir.xmlToObj(response);
   }
 
