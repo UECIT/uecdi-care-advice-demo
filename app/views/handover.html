@@ -8,69 +8,61 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
 
-      <h1 class="nhsuk-u-margin-top-4">
-        111 Patient consultation report
-      </h1>
+    <h1 class="nhsuk-u-margin-top-4">
+      111 Patient consultation report
+    </h1>
 
     <p>This care advice only relates to this consultation and is valid for 48 hours <br><br>
-      Case ID {{handoverMessage.id}} <br>
-      With reference to your call on 07/09/2017 12:44:41
+      Case ID {{encounter.id}} <br>
+      With reference to your call on {{encounter.period.start | formatDate}} at {{encounter.period.start | formatTime }}
     </p>
 
     <!-- Get Patient out of handover Message -->
-
-    {% for item in handoverMessage.contained %}
-      {% if item.resourceType == 'Bundle'%}
-        {% for bundleItem in item.entry %}
-          {% if bundleItem.resource.resourceType == 'Patient'%}
-          <h2>Patient details</h2>
-          <div class="nhsuk-table-responsive">
-             <table class="nhsuk-table">
-               <caption class="nhsuk-table__caption">Patient details</caption>
-               <tbody class="nhsuk-table__body">
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">NHS number</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.identifier[0].value }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Name</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.name[0].given[0] }} {{ bundleItem.resource.name[0].family }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Date of birth</td>
-                   <td class="nhsuk-table__cell ">{{ bundleItem.resource.birthDate }}</td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                   <td class="nhsuk-table__cell">Address</td>
-                   <td class="nhsuk-table__cell ">
-                     {{ bundleItem.resource.address[0].line[0] }}<br>
-                     {{ bundleItem.resource.address[0].line[1] }}<br>
-                     {{ bundleItem.resource.address[0].line[2] }}<br>
-                     {{ bundleItem.resource.address[0].city }}<br>
-                     {{ bundleItem.resource.address[0].postalCode }}
-                  </td>
-                 </tr>
-                 <tr class="nhsuk-table__row">
-                  <td class="nhsuk-table__cell">GP Details</td>
-                  <td class="nhsuk-table__cell ">
-                   {{ bundleItem.resource.contained[1].name[0].prefix }} {{ bundleItem.resource.contained[1].name[0].given[0] }} {{ bundleItem.resource.contained[1].name[0].family }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[0] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[1] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].line[2] }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].city }}<br>
-                   {{ bundleItem.resource.contained[1].address[0].postalCode }}
-                  </td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-
-
-    
+    {% if patient %}
+    <h2>Patient details</h2>
+    <div class="nhsuk-table-responsive">
+       <table class="nhsuk-table">
+         <caption class="nhsuk-table__caption">Patient details</caption>
+         <tbody class="nhsuk-table__body">
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">NHS number</td>
+             <td class="nhsuk-table__cell ">{{ patient.identifier[0].value }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Name</td>
+             <td class="nhsuk-table__cell ">{{ patient.name[0].given[0] }} {{ patient.name[0].family }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Date of birth</td>
+             <td class="nhsuk-table__cell ">{{ patient.birthDate }}</td>
+           </tr>
+           <tr class="nhsuk-table__row">
+             <td class="nhsuk-table__cell">Address</td>
+             <td class="nhsuk-table__cell ">
+               {{ patient.address[0].line[0] }}<br>
+               {{ patient.address[0].line[1] }}<br>
+               {{ patient.address[0].line[2] }}<br>
+               {{ patient.address[0].city }}<br>
+               {{ patient.address[0].postalCode }}
+            </td>
+           </tr>
+           {% if gp %}
+             <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">GP Details</td>
+              <td class="nhsuk-table__cell ">
+               {{ gp.name[0].prefix }} {{ gp.name[0].given[0] }} {{ gp.name[0].family }}<br>
+               {{ gp.address[0].line[0] }}<br>
+               {{ gp.address[0].line[1] }}<br>
+               {{ gp.address[0].line[2] }}<br>
+               {{ gp.address[0].city }}<br>
+               {{ gp.address[0].postalCode }}
+              </td>
+             </tr>
+           {% endif %}
+         </tbody>
+       </table>
+     </div>
+    {% endif %}
 
       <h2>
         Medical details
@@ -81,12 +73,16 @@
           <caption class="nhsuk-table__caption">Medical details</caption>
           <tbody class="nhsuk-table__body">
             <tr class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">Allergies</td>
-              <td class="nhsuk-table__cell ">No allergies</td>
+              <td class="nhsuk-table__cell">Conditions</td>
+              <td class="nhsuk-table__cell ">
+                {% for condition in conditions %}
+                  {{ condition.code.coding[0].display }}<br>
+                {% endfor %}
+              </td>
             </tr>
             <tr class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">Conditions</td>
-              <td class="nhsuk-table__cell ">Asthma</td>
+              <td class="nhsuk-table__cell">Allergies</td>
+              <td class="nhsuk-table__cell ">No allergies</td>
             </tr>
           </tbody>
         </table>
@@ -96,39 +92,19 @@
         Assessment summary
       </h2>
 
-      <p>
-        <ul>
-           <!-- Get Observations out of handover Message -->
-           {% for item in handoverMessage.contained %}
-            {% if item.resourceType == 'Bundle'%}
-              {% for bundleItem in item.entry %}
-                {% if bundleItem.resource.resourceType == 'Observation'%}
-                  <li>{{ bundleItem.resource.code.coding[0].display }}</li>
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </p>
-
-      <h2>
-        Care advice
-      </h2>
-
+      <ul>
+        {% for observation in observations %}
+          <li>{{ observation.code.coding[0].display }}{% if observation.valueString %}: {{ observation.valueString }}{% endif %}</li>
+        {% endfor %}
+      </ul>
 
 <section class="local-header">
     <div class="measure">
-        <h1 class="local-header__title">{{handoverMessage.description}}</h1>
+        <h1 class="local-header__title">{{referralRequest.description}}</h1>
         <div class="local-header__intro">
-          {% for item in handoverMessage.contained %}
-            {% if item.resourceType == 'Bundle'%}
-              {% for bundleItem in item.entry %}
-                {% if bundleItem.resource.resourceType == 'CarePlan'%}
-                  {% if bundleItem.resource.title == 'Result'%}
-                    <p>{{bundleItem.resource.description}}</p>
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
+          {% for carePlan in carePlans %}
+            {% if carePlan.title == 'Result'%}
+              <p>{{carePlan.description}}</p>
             {% endif %}
           {% endfor %}
         </div>
@@ -139,31 +115,39 @@
 
 <h2>Selected service</h2>
 
-{% for item in handoverMessage.contained %}
-  {% if item.resourceType == 'Practitioner'%}
-    {% if item.id == 'recipientPractitioner'%}
-      {{ item.address[0].line[0] }}<br>
-      {{ item.address[0].line[1] }}<br>
-      {{ item.address[0].city }}<br>
-      {{ item.address[0].postalCode }}
+{% if selectedServiceLocation %}
+    {{ selectedServiceLocation.address.line[0] }}<br>
+    {% if selectedServiceLocation.address.line[1] %}
+      {{ selectedServiceLocation.address.line[1] }}<br>
     {% endif %}
-  {% endif %}
-{% endfor %}
+    {% if selectedServiceLocation.address.line[2] %}
+      {{ selectedServiceLocation.address.line[2] }}<br>
+    {% endif %}
+    {% if selectedServiceLocation.address.city %}
+      {{ selectedServiceLocation.address.city }}<br>
+    {% endif %}
+    {{ selectedServiceLocation.address.postalCode }}
 
-<div class="spacer"></div>
+    <div class="spacer"></div>
 
-<details class="nhsuk-details nhsuk-expander">
-  <summary class="nhsuk-details__summary">
-    <span class="nhsuk-details__summary-text">
-      View map to service
-    </span>
-  </summary>
-  <div class="nhsuk-details__text">
-    
-    <div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
-    
-  </div>
-</details>
+    <details class="nhsuk-details nhsuk-expander">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">
+          View map to service
+        </span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <div class='embed-container'>
+          <iframe src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9303.304271071542!2d-1.4308247!3d54.3423823!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x13b66b7d71334298!2sFriarage+Hospital!5e0!3m2!1sen!2suk!4v1553007936758'
+                  width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe>
+        </div>
+        <p>
+          NOTE: Dynamic embedded maps require an API key, so the above is a static example.
+          <a target="_blank" href='https://www.google.com/maps/search/?api=1&query={{ selectedServiceLocation.address.line[0] }},+{{ selectedServiceLocation.address.postalCode }}'>Search on Google Maps</a>
+        </p>
+      </div>
+    </details>
+{% endif %}
 
 
 <div class="spacer"></div>
@@ -172,98 +156,49 @@
   <h2 class="heading-medium">
     Appointment details
   </h2>
-  <ul>
-    {% for item in handoverMessage.contained %}
-      {% if item.resourceType == 'Appointment'%}
-        <li>{{item.description}}</li>
-      {% endif %}
+  <p>{{appointment.description}}</p>
+  <p>Type: {{appointment.appointmentType.text}}</p>
+  <p>Your appointment will be on {{appointment.start | formatDate}} at {{appointment.start | formatTime }}</p>
+  <p>Main reason for the appointment: {{appointment.reason[0].text}}</p>
+  <h4>Service details</h4>
+  <p>Service type: {{appointment.serviceType[0].text}}</p>
+  <p>Service category: {{appointment.serviceCategory.text}}</p>
+  <p>Service specialty: {{appointment.specialty[0].text}}</p>
+</section>
+
+{% if carePlans.length %}
+  <section class="outcome-additional-info measure">
+    <h2 class="heading-medium">
+      Care Advice
+    </h2>
+
+    {% for carePlan in carePlans %}
+    <div class="nhsuk-care-card nhsuk-care-card--urgent">
+      <div class="nhsuk-care-card__heading-container">
+        <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>{{ carePlan.title }}</span></h3>
+        <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
+      </div>
+      <div class="nhsuk-care-card__content">
+          <ul>
+            <li>{{carePlan.description}}</li>
+          </ul>
+      </div>
+    </div>
     {% endfor %}
-  </ul>
-</section>
-
-
-<section class="outcome-additional-info measure">
-  <h2 class="heading-medium">
-    Before you go
-  </h2>
-  <ul>
-      {% for item in handoverMessage.contained %}
-        {% if item.resourceType == 'Bundle'%}
-          {% for bundleItem in item.entry %}
-            {% if bundleItem.resource.resourceType == 'CarePlan'%}
-              {% if bundleItem.resource.title == 'Before you go'%}
-                <li>{{bundleItem.resource.description}}</li>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-  </ul>
-</section>
-
-<hr class="alternative-care-hr">
-
-<div class="care-advice measure">
-
-
-  <div class="nhsuk-care-card nhsuk-care-card--urgent">
-    <div class="nhsuk-care-card__heading-container">
-      <h3 class="nhsuk-care-card__heading"><span role="text"><span class="nhsuk-u-visually-hidden">Urgent advice: </span>What you can do in the meantime</span></h3>
-      <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
-    </div>
-    <div class="nhsuk-care-card__content">
-        <ul>
-            {% for item in handoverMessage.contained %}
-              {% if item.resourceType == 'Bundle'%}
-                {% for bundleItem in item.entry %}
-                  {% if bundleItem.resource.resourceType == 'CarePlan'%}
-                    {% if bundleItem.resource.title == 'What you can do in the meantime'%}
-                      <li>{{bundleItem.resource.description}}</li>
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-  </div>
-
+  </section>
+{% endif %}
 
   <h4 id="Advice_CX221114-Adult-Male" class="heading-small">Further information</h4>
   <p>
     <ul>
-    {% if handoverMessage.supportingInfo[0].display.includes('Vomiting')%}
-      <li><a href="https://www.nhs.uk/conditions/diarrhoea-and-vomiting/">Diarrhoea and vomiting </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Feverandvomiting.aspx">Your guide to Fever and vomiting </a></li>
-    {% endif %}
-
-    {% if handoverMessage.supportingInfo[0].display.includes('Headache')%}
-      <li><a href="https://www.nhs.uk/conditions/headaches/">Headaches </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Headaches.aspx">Your guide to Headaches </a></li>
-    {% endif %}
-
-    {% if handoverMessage.supportingInfo[0].display.includes('Leg injury')%}
-      <li><a href="https://www.nhs.uk/live-well/exercise/knee-pain-and-other-running-injuries/">Knee pain and other running injuries </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {% endif %}
-
-    {% if handoverMessage.supportingInfo[0].display.includes('Hand injury')%}
-      <li><a href="https://www.nhs.uk/conditions/sprains-and-strains/">Sprains and strains </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Tendonitisanimation.aspx">Your guide to Tendonitis </a></li>
-    {% endif %}
-
-    {% if handoverMessage.supportingInfo[0].display.includes('Palpitations')%}
-      <li><a href="https://www.nhs.uk/conditions/heart-palpitations/">Heart palpitations and ectopic beats </a></li>
-      <li><a href="https://www.nhs.uk/Video/Pages/guide-to-ecg.aspx">Your guide to electrocardiogram (ECG) </a></li>
-    {% endif %}
-
-    {% if handoverMessage.supportingInfo[0].display.includes('Mental Health')%}
-      <li><a href="https://www.nhs.uk/conditions/stress-anxiety-depression/mental-health-helplines/">Mental health helplines </a></li>
-      <li><a href="https://www.nhs.uk/video/Pages/Talkingtherapies.aspx">Your guide to Mental and emotional health: talking therapies </a></li>
-    {% endif %}
+      <!--  TODO -->
+      {% for resource in referralRequest.contained %}
+        {% if resource.resourceType == 'Observation'%}
+          <li><a href="https://www.nhs.uk/search/?q={{resource.code.coding[0].display}}">{{resource.code.coding[0].display}}</a></li>
+        {% endif %}
+      {% endfor %}
     </ul>
   </p>
-
 
   <div class='embed-container'>
     <iframe src='https://www.youtube.com/embed/tSpHo655BP4?rel=0' frameborder='0' allowfullscreen></iframe>
@@ -275,7 +210,6 @@
       <span class="nhsuk-care-card__arrow" aria-hidden="true"></span>
     </div>
     <div class="nhsuk-care-card__content">
-
         <ul>
           <li>If there are any new symptoms, or if the condition gets worse, call 111 for advice.</li>
         </ul>
@@ -283,7 +217,7 @@
   </div>
 
     <p>Always follow any medical advice you’ve already been given by your doctor. <br>See our <a href="/Help/Terms" target="_blank">terms</a>.</p>
-    
+
   </div>
 </div>
 

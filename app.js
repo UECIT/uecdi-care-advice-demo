@@ -20,7 +20,9 @@ const config = require('./app/config');
 const locals = require('./app/locals');
 const routes = require('./app/routes');
 const documentationRoutes = require('./docs/documentation_routes');
-const utils = require('./lib/utils.js')
+const utils = require('./lib/utils.js');
+
+const reports = require('./app/services/report-service.js');
 
 // Set configuration variables
 const port = 5000;
@@ -33,17 +35,17 @@ const cors = require('cors');
 app.use(cors());
 const documentationApp = express();
 
-
 // Set up configuration variables
-var useAutoStoreData = process.env.USE_AUTO_STORE_DATA || config.useAutoStoreData
-var useCookieSessionStore = process.env.USE_COOKIE_SESSION_STORE || config.useCookieSessionStore
+var useAutoStoreData = process.env.USE_AUTO_STORE_DATA
+    || config.useAutoStoreData
+var useCookieSessionStore = process.env.USE_COOKIE_SESSION_STORE
+    || config.useCookieSessionStore
 
 // Add variables that are available in all views
 app.locals.asset_path = '/public/'
 app.locals.useAutoStoreData = (useAutoStoreData === 'true')
 app.locals.useCookieSessionStore = (useCookieSessionStore === 'true')
 app.locals.serviceName = config.serviceName
-
 
 // Nunjucks configuration for application
 var appViews = [
@@ -63,9 +65,9 @@ var nunjucksAppEnv = nunjucks.configure(appViews, nunjucksConfig)
 // Add Nunjucks filters
 utils.addNunjucksFilters(nunjucksAppEnv)
 
-
 // Session uses service name to avoid clashes with other prototypes
-const sessionName = 'uecdi-care-advice-demo' + (Buffer.from(config.serviceName, 'utf8')).toString('hex')
+const sessionName = 'uecdi-care-advice-demo' + (Buffer.from(config.serviceName,
+    'utf8')).toString('hex')
 let sessionOptions = {
   secret: sessionName,
   cookie: {
@@ -88,13 +90,11 @@ if (useCookieSessionStore === 'true') {
   })))
 }
 
-
 // Support for parsing data in POSTs
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-
 
 // Automatically store all data users enter
 if (useAutoStoreData === 'true') {
@@ -102,16 +102,15 @@ if (useAutoStoreData === 'true') {
   utils.addCheckedFunction(nunjucksAppEnv)
 }
 
-
 // initial checks
 checkFiles()
 
-
 // Warn if node_modules folder doesn't exist
-function checkFiles () {
+function checkFiles() {
   const nodeModulesExists = fs.existsSync(path.join(__dirname, '/node_modules'))
   if (!nodeModulesExists) {
-    console.error('ERROR: Node module folder missing. Try running `npm install`')
+    console.error(
+        'ERROR: Node module folder missing. Try running `npm install`')
     process.exit(0)
   }
 
@@ -119,13 +118,14 @@ function checkFiles () {
   const envExists = fs.existsSync(path.join(__dirname, '/.env'))
   if (!envExists) {
     fs.createReadStream(path.join(__dirname, '/lib/template.env'))
-      .pipe(fs.createWriteStream(path.join(__dirname, '/.env')))
+    .pipe(fs.createWriteStream(path.join(__dirname, '/.env')))
   }
 }
 
 // Create template session data defaults file if it doesn't exist
 const dataDirectory = path.join(__dirname, '/app/data')
-const sessionDataDefaultsFile = path.join(dataDirectory, '/session-data-defaults.js')
+const sessionDataDefaultsFile = path.join(dataDirectory,
+    '/session-data-defaults.js')
 const sessionDataDefaultsFileExists = fs.existsSync(sessionDataDefaultsFile)
 
 if (!sessionDataDefaultsFileExists) {
@@ -134,12 +134,13 @@ if (!sessionDataDefaultsFileExists) {
     fs.mkdirSync(dataDirectory)
   }
 
-  fs.createReadStream(path.join(__dirname, '/lib/template.session-data-defaults.js'))
-    .pipe(fs.createWriteStream(sessionDataDefaultsFile))
+  fs.createReadStream(
+      path.join(__dirname, '/lib/template.session-data-defaults.js'))
+  .pipe(fs.createWriteStream(sessionDataDefaultsFile))
 }
 
 // Check if the app is documentation only
-if(onlyDocumentation !== 'true') {
+if (onlyDocumentation !== 'true') {
   // Require authentication if not
   app.use(authentication);
 }
@@ -153,13 +154,14 @@ documentationApp.set('view engine', 'html');
 
 // Middleware to serve static assets
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/nhsuk-frontend', express.static(path.join(__dirname, 'node_modules/nhsuk-frontend/packages')));
-app.use('/nhsuk-frontend', express.static(path.join(__dirname, 'node_modules/nhsuk-frontend/dist')));
-
+app.use('/nhsuk-frontend', express.static(
+    path.join(__dirname, 'node_modules/nhsuk-frontend/packages')));
+app.use('/nhsuk-frontend',
+    express.static(path.join(__dirname, 'node_modules/nhsuk-frontend/dist')));
 
 // Check if the app is documentation only
-if(onlyDocumentation == 'true') {
-  app.get('/', function(req, res) {
+if (onlyDocumentation == 'true') {
+  app.get('/', function (req, res) {
     // Redirect to the documentation pages if it is
     res.redirect('/docs');
   });
@@ -173,45 +175,45 @@ app.get(/^([^.]+)$/, function (req, res, next) {
   automaticRouting.matchRoutes(req, res, next)
 })
 
+// Database connectivity
+const Sequelize = require("sequelize");
+const database = new Sequelize({
+  dialect: 'mysql',
+  database: 'cdss_uecdi',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+});
 
+const handoverMessageEntry = database.define("handover", {
+  handoverId: {
+    type: Sequelize.BIGINT,
+    primaryKey: true
+  },
+  handoverJson: new Sequelize.TEXT('medium')
+}, {
+  timestamps: false
+});
 
+// Route post to handover page
+app.post("/handover", function (req, res, next) {
+  const handoverMessage = req.body;
+  console.info("Saving handover " + handoverMessage.id);
+  handoverMessageEntry.sync({
+    force: false
+  }).then(() => {
+    return handoverMessageEntry.create({
+      handoverId: handoverMessage.id,
+      handoverJson: JSON.stringify(handoverMessage)
+    });
+  });
+  res.send(200, JSON.stringify(handoverMessage));
+});
 
-
-
- // Database connectivity
- const Sequelize = require("sequelize");
- let database = new Sequelize('cdss_uecdi', 'root', 'password', {
-   dialect: 'mysql',
-   host: "localhost",
-   port: 3306,
- })
-
- let handoverMessageEntry = database.define("handover", {
-   handoverId: {
-     type: Sequelize.BIGINT,
-     primaryKey: true
-   },
-   handoverJson: Sequelize.TEXT
- }, {
-   timestamps: false
- });
-
- // Route post to handover page
- app.post("/handover", function (req, res, next) {
-   const handoverMessage = req.body;
-   handoverMessageEntry.sync({
-     force: false
-   }).then(() => {
-     return handoverMessageEntry.create({
-       handoverId: handoverMessage.id,
-       handoverJson: JSON.stringify(handoverMessage)
-     });
-   });
-   res.send(200, JSON.stringify(handoverMessage));
- });
-
- // Route Get to handover page
- app.get('/handover/list', function (req, res, next) {
+// Route Get to handover page
+app.get('/handover/list', function (req, res, next) {
+  console.info("Retrieving all handover messages");
   handoverMessageEntry.findAll({
     attributes: ['handoverId'],
   }).then(handoverList => {
@@ -222,8 +224,9 @@ app.get(/^([^.]+)$/, function (req, res, next) {
   });
 });
 
- // Route Get to handover page
- app.get('/handover/:id', function (req, res, next) {
+// Route Get to handover page
+app.get('/handover/:id', function (req, res, next) {
+  console.info("Retrieving handover " + req.params.id);
   handoverMessageEntry.findByPk(req.params.id).then(handover => {
     console.log("handover message:", JSON.stringify(handover));
     const handoverMessage = JSON.parse(handover.handoverJson);
@@ -233,12 +236,59 @@ app.get(/^([^.]+)$/, function (req, res, next) {
   });
 });
 
+function parseUrl(url, origin) {
 
+  // Captures an absolute url that ends with Encounter/*
+  const absoluteUrlPattern = /^(https?:\/\/(?:[^\/]+\/)*)Encounter\/([^\/]+\/?)$/;
 
+  // Captures a relative url that ends with Encounter/*
+  const relativeUrlPattern = /^\/(?:[^\/]+\/)*Encounter\/[^\/]+\/?$/;
 
+  if (relativeUrlPattern.test(url)) {
+    if (origin.endsWith("/")) {
+      origin = origin.slice(0, -1);
+    }
+    url = origin + url;
+  }
 
+  if (absoluteUrlPattern.test(url)) {
+    const [, host, encounterId] = absoluteUrlPattern.exec(url);
+    return {host, encounterId};
+  }
 
+  return {host: undefined, encounterId: undefined};
+}
 
+// Route post to encounter report
+app.get('/report', async function (req, res, next) {
+  const {host, encounterId} = parseUrl(req.query.encounter, req.get("referer"));
+  if (!host) {
+    res.status(400).send("Could not parse " + req.query.encounter);
+    return;
+  }
+
+  try {
+    const report = await reports.getReport(encounterId, host);
+    let input = {
+      encounter: report.encounter(),
+      appointment: report.appointment(),
+      patient: await report.patient(),
+      gp: await report.gp(),
+      referralRequest: report.referralRequest(),
+      handoverMessage: report.handoverMessage(),
+      selectedService: await report.selectedService(),
+      selectedServiceLocation: await report.selectedServiceLocation(),
+      observations: report.observations(),
+      conditions: report.conditions(),
+      carePlans: report.carePlans()
+    };
+    // console.log(input);
+    res.render("handover.html", input);
+  } catch (e) {
+    console.log(e.stack);
+    res.status(500).send("Failed to process report: " + e.message);
+  }
+});
 
 // Check if the app is using documentation
 if (useDocumentation || onlyDocumentation == 'true') {
@@ -307,6 +357,6 @@ app.use(function (err, req, res, next) {
 })
 
 // Run the application
-app.listen(port);
+app.listen(port, () => console.log("Listening on port " + port));
 
 module.exports = app;
